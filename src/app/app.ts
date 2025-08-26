@@ -1,13 +1,14 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import { Button, ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, ButtonModule],
-  templateUrl: './app.html',
-  styleUrl: './app.css'
+  standalone: true,
+  imports: [CommonModule, RouterOutlet],
+  templateUrl: './app.html', // This points to your HTML file
+  styleUrls: ['./app.css'],
 })
-export class App {
-  protected readonly title = signal('final');
+export class AppComponent {
+  title = 'studentAnnouncement';
 }

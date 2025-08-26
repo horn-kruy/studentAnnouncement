@@ -1,0 +1,29 @@
+<p>announcement-list works!</p>
+<div class="container">
+    <h2>Student Announcements</h2>
+
+    <!-- 
+    This block handles the data from the Observable.
+    The 'async' pipe subscribes and gets the data for us.
+  -->
+    <div *ngIf="announcements$ | async as announcements; else loading">
+
+        <!-- If there are no announcements, show a message -->
+        <p *ngIf="announcements.length === 0">
+            No announcements found.
+        </p>
+
+        <!-- Loop over the announcements and display them -->
+        <ul class="announcement-list" *ngIf="announcements.length > 0">
+            <li *ngFor="let announcement of announcements" class="announcement-item">
+                <h3>{{ announcement.title }}</h3>
+                <p>{{ announcement.content }}</p>
+            </li>
+        </ul>
+    </div>
+
+    <!-- This template is shown while the data is loading -->
+    <ng-template #loading>
+        <p>Loading announcements...</p>
+    </ng-template>
+</div>
