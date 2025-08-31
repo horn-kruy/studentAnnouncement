@@ -1,15 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-// Import the model from the models folder
-import { StudentAnnouncement } from '../models/student-announcement.model';
+import { StudentAnnouncement, CreateAnnouncementDto } from '../models/student-announcement.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StudentAnnouncementService {
-  private apiUrl = '/api/StudentAnnouncements';
+  private apiUrl = 'http://172.104.190.114/api/StudentAnnoucements';
 
   constructor(private http: HttpClient) {}
 
@@ -21,11 +19,11 @@ export class StudentAnnouncementService {
     return this.http.get<StudentAnnouncement>(`${this.apiUrl}/${id}`);
   }
 
-  createAnnouncement(announcement: StudentAnnouncement): Observable<StudentAnnouncement> {
+  createAnnouncement(announcement: CreateAnnouncementDto): Observable<StudentAnnouncement> {
     return this.http.post<StudentAnnouncement>(this.apiUrl, announcement);
   }
 
-  updateAnnouncement(id: number, announcement: StudentAnnouncement): Observable<any> {
+  updateAnnouncement(id: number, announcement: CreateAnnouncementDto): Observable<any> {
     return this.http.put(`${this.apiUrl}/${id}`, announcement);
   }
 

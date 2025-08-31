@@ -1,0 +1,60 @@
+<div class="course-container">
+  <h2>📚 Student Courses</h2>
+
+  <!-- Search + Add Button -->
+  <div class="toolbar">
+    <input type="text" [(ngModel)]="searchText" placeholder="Search courses...">
+    <button (click)="openAddPopup()">Add Course</button>
+  </div>
+
+  <!-- Courses Table -->
+  <div *ngIf="courses$ | async as courses; else loading">
+    <p *ngIf="filteredCourses(courses).length === 0" class="empty">No courses found.</p>
+
+    <table *ngIf="filteredCourses(courses).length > 0" class="course-table">
+      <thead>
+        <tr>
+          <th>Student ID</th>
+          <th>Course ID</th>
+          <th>Enroll Date</th>
+          <th>Last Visited</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let course of filteredCourses(courses)">
+          <td>{{ course.studentId }}</td>
+          <td>{{ course.courseId }}</td>
+          <td>{{ course.enrollDate | date:'mediumDate' }}</td>
+          <td>{{ course.lastVisited ? (course.lastVisited | date:'mediumDate') : '-' }}</td>
+          <td>
+            <button (click)="editCourse(course)">Edit</button>
+            <button (click)="deleteCourse(course.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #loading>
+    <p class="loading">⏳ Loading courses...</p>
+  </ng-template>
+
+  <!-- Popup Form -->
+  <div class="popup" *ngIf="popupVisible">
+    <div class="popup-content">
+      <h3>{{ editingId ? 'Update Course' : 'Add Course' }}</h3>
+      <form (ngSubmit)="saveCourse()">
+        <input type="text" [(ngModel)]="selectedCourse.studentId" name="studentId" placeholder="Student ID" required>
+        <input type="number" [(ngModel)]="selectedCourse.courseId" name="courseId" placeholder="Course ID" required>
+        <input type="date" [(ngModel)]="selectedCourse.enrollDate" name="enrollDate" placeholder="Enroll Date" required>
+        <input type="date" [(ngModel)]="selectedCourse.lastVisited" name="lastVisited" placeholder="Last Visited">
+
+        <div class="popup-actions">
+          <button type="submit">{{ editingId ? 'Update' : 'Add' }}</button>
+          <button type="button" (click)="closePopup()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

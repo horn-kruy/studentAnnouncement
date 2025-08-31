@@ -1,0 +1,62 @@
+<div class="activities-container">
+  <h2>📝 Student Course Activities</h2>
+
+  <!-- Search + Add -->
+  <div class="toolbar">
+    <input type="text" [(ngModel)]="searchText" placeholder="Search activities...">
+    <button (click)="openAddPopup()">Add Activity</button>
+  </div>
+
+  <!-- Table -->
+  <table *ngIf="filteredActivities().length > 0" class="activity-table">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Type</th>
+        <th>Course ID</th>
+        <th>Due Date</th>
+        <th>Description</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let activity of filteredActivities()">
+        <td>{{ activity.title }}</td>
+        <td>{{ activity.type }}</td>
+        <td>{{ activity.courseId }}</td>
+        <td>{{ activity.dueDate | date:'mediumDate' }}</td>
+        <td>{{ activity.description }}</td>
+        <td>
+          <button (click)="editActivity(activity)">Edit</button>
+          <button (click)="deleteActivity(activity.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="filteredActivities().length === 0">No activities found.</p>
+
+  <!-- Popup Form -->
+  <div class="popup" *ngIf="popupVisible">
+    <div class="popup-content">
+      <h3>{{ editingId ? 'Update Activity' : 'Add Activity' }}</h3>
+      <form (ngSubmit)="saveActivity()">
+        <input type="number" [(ngModel)]="selectedActivity.courseId" name="courseId" placeholder="Course ID" required>
+        <input type="text" [(ngModel)]="selectedActivity.title" name="title" placeholder="Title" required>
+        
+        <select [(ngModel)]="selectedActivity.type" name="type" required>
+          <option *ngFor="let t of activityTypes" [value]="t">{{ t }}</option>
+        </select>
+
+        <input type="date" [(ngModel)]="selectedActivity.dueDate" name="dueDate" required>
+
+        <textarea [(ngModel)]="selectedActivity.description" name="description" placeholder="Description" required></textarea>
+
+        <div class="popup-actions">
+          <button type="submit">{{ editingId ? 'Update' : 'Add' }}</button>
+          <button type="button" (click)="closePopup()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

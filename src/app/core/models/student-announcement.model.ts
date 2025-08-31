@@ -1,6 +1,14 @@
+// models/student-announcement.model.ts
 export interface StudentAnnouncement {
   id: number;
   title: string;
   content: string;
-  // Add any other properties that your API provides
+  createdAt: string;
+  isActive: boolean;
+}
+
+export interface CreateAnnouncementDto {
+  title: string;
+  content: string;
+  isActive: boolean;
 }

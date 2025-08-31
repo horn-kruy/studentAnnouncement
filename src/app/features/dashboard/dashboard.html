@@ -1,0 +1,25 @@
+<div class="dashboard">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2 class="logo">🎓 Student Portal</h2>
+    <nav>
+      <ul>
+        <li><a routerLink="announcements" routerLinkActive="active">📢 Announcements</a></li>
+        <li><a routerLink="activities" routerLinkActive="active">📝 Activities</a></li>
+        <li><a routerLink="courses" routerLinkActive="active">📚 Courses</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="content">
+    <header class="content-header">
+      <h1>Welcome to Student Dashboard</h1>
+    </header>
+
+    <section class="content-body">
+      <!-- Child routes render here -->
+      <router-outlet></router-outlet>
+    </section>
+  </main>
+</div>

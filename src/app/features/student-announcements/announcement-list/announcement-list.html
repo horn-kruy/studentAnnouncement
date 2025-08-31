@@ -1,29 +1,68 @@
-<p>announcement-list works!</p>
-<div class="container">
-    <h2>Student Announcements</h2>
+<div class="announcement-container">
+  <h2>📢 Student Announcements</h2>
 
-    <!-- 
-    This block handles the data from the Observable.
-    The 'async' pipe subscribes and gets the data for us.
-  -->
-    <div *ngIf="announcements$ | async as announcements; else loading">
+  <!-- Search + Add Button -->
+  <div class="toolbar">
+    <input type="text" [(ngModel)]="searchText" placeholder="Search announcements...">
+    <button (click)="openAddPopup()">Add Announcement</button>
+  </div>
 
-        <!-- If there are no announcements, show a message -->
-        <p *ngIf="announcements.length === 0">
-            No announcements found.
-        </p>
+  <!-- Announcements Table -->
+  <div *ngIf="announcements$ | async as announcements; else loading">
+    <p *ngIf="filteredAnnouncements(announcements).length === 0" class="empty">No announcements found.</p>
 
-        <!-- Loop over the announcements and display them -->
-        <ul class="announcement-list" *ngIf="announcements.length > 0">
-            <li *ngFor="let announcement of announcements" class="announcement-item">
-                <h3>{{ announcement.title }}</h3>
-                <p>{{ announcement.content }}</p>
-            </li>
-        </ul>
+    <table *ngIf="filteredAnnouncements(announcements).length > 0" class="announcement-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Content</th>
+          <th>Status</th>
+          <th>Created At</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let announcement of filteredAnnouncements(announcements)">
+          <td>{{ announcement.title }}</td>
+          <td>{{ announcement.content }}</td>
+          <td>
+            <span [class.active]="announcement.isActive" [class.inactive]="!announcement.isActive">
+              {{ announcement.isActive ? "Active" : "Inactive" }}
+            </span>
+          </td>
+          <td>{{ announcement.createdAt | date:'medium' }}</td>
+          <td>
+            <button (click)="editAnnouncement(announcement)">Edit</button>
+            <button (click)="deleteAnnouncement(announcement.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #loading>
+    <p class="loading">⏳ Loading announcements...</p>
+  </ng-template>
+
+  <!-- Popup Form -->
+  <div class="popup" *ngIf="popupVisible">
+    <div class="popup-content">
+      <h3>{{ editingId ? 'Update Announcement' : 'Add Announcement' }}</h3>
+      <form (ngSubmit)="saveAnnouncement()">
+        <input type="text" [(ngModel)]="selectedAnnouncement.title" name="title" placeholder="Title" required>
+        <textarea [(ngModel)]="selectedAnnouncement.content" name="content" placeholder="Content" required></textarea>
+        
+        <!-- Active checkbox aligned -->
+        <div class="checkbox-container">
+          <input type="checkbox" [(ngModel)]="selectedAnnouncement.isActive" name="isActive" id="activeCheckbox">
+          <label for="activeCheckbox">Active</label>
+        </div>
+
+        <div class="popup-actions">
+          <button type="submit">{{ editingId ? 'Update' : 'Add' }}</button>
+          <button type="button" (click)="closePopup()">Cancel</button>
+        </div>
+      </form>
     </div>
-
-    <!-- This template is shown while the data is loading -->
-    <ng-template #loading>
-        <p>Loading announcements...</p>
-    </ng-template>
+  </div>
 </div>
